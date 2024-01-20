@@ -1,0 +1,88 @@
+body {
+    /* height: 300vh; */
+    /* background: black; */
+    /* color: white; */
+    box-sizing: border-box;
+}
+
+.container {
+    position: relative;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    top: 40rem;
+}
+
+svg {
+    margin-top: 20vh;
+    width: 100dvw;
+    height: 100%;
+    overflow: visible;
+}
+
+.item {
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+}
+
+.line {
+    fill: none;
+    stroke: white;
+    stroke-width: 2px;
+}
+text {
+    fill: white;
+    font-size: 15px;
+    font-family: "Signika Negative", sans-serif;
+    visibility: hidden;
+}
+.item01:hover,
+.item02:hover,
+.item03:hover {
+    /* apply glowing filter */
+    filter: url(#glow2);
+}
+
+h2 {
+    margin: 0;
+}
+
+.popup {
+    position: absolute;
+    width: 500px;
+    height: fit-content;
+    background-color: #575555e2;
+    padding: 2rem;
+    border-radius: 0.5rem;
+
+    color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    /* Retro game styles */
+    border: 1px solid #fff;
+    background-size: 100% 200%;
+    transition: background-position 0.5s;
+}
+
+.popup:hover {
+    background-position: 0% -100%;
+}
+
+.popup__content {
+    padding: 0.5rem;
+    border-radius: 0.25rem;
+}
+.popup01 {
+    top: 500px;
+    left: 20px;
+}
+.popup02 {
+    top: 1000px;
+    left: 200px;
+}
+.popup03 {
+    top: 1550px;
+    left: auto;
+    right: 200px;
+}
