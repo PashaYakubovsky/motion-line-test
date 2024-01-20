@@ -5,15 +5,13 @@ import { ScrollTrigger } from "@/gsap/ScrollTrigger";
 import { DrawSVGPlugin } from "@/gsap/DrawSVGPlugin";
 import { MotionPathPlugin } from "@/gsap/MotionPathPlugin";
 import { GSDevTools } from "@/gsap/GSDevTools";
-import { parsePath } from "path-data-parser";
 
 gsap.registerPlugin(ScrollTrigger, DrawSVGPlugin, MotionPathPlugin, GSDevTools);
 
 function App() {
-    const ref1 = useRef<HTMLDivElement | null>(null);
-    const ref2 = useRef<HTMLDivElement | null>(null);
-
     useEffect(() => {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
         const ctx = gsap.context(() => {
             //learn how this was made at https://www.youtube.com/watch?v=ersN5fk8py0
 
@@ -91,15 +89,14 @@ function App() {
                     2.52
                 );
 
-            const main = gsap
-                .timeline({
-                    scrollTrigger: {
-                        trigger: "#svg",
-                        scrub: true,
-                        start: "top center",
-                        end: "bottom center",
-                    },
-                })
+            gsap.timeline({
+                scrollTrigger: {
+                    trigger: "#svg",
+                    scrub: true,
+                    start: "top center",
+                    end: "bottom center",
+                },
+            })
                 .to(".ball01", { autoAlpha: 1, duration: 0.05 })
                 .from(".theLine", { drawSVG: "0", duration: 4 }, 0)
                 .to(
@@ -149,7 +146,7 @@ function App() {
         };
     }, []);
 
-    const [svgPath, setP] = useState<string>(`
+    const [svgPath] = useState<string>(`
         M 200,0
         Q 650 230 250 450 
         T 300 800
