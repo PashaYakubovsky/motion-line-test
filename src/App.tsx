@@ -97,20 +97,7 @@ function App() {
                     end: "bottom center",
                 },
             })
-                .to(".ball01", { autoAlpha: 1, duration: 0.05 })
                 .from(".theLine", { drawSVG: "0", duration: 4 }, 0)
-                .to(
-                    ".ball01",
-                    {
-                        motionPath: {
-                            path: ".theLine",
-                            align: ".theLine",
-                            alignOrigin: [0.5, 0.5],
-                        },
-                        duration: 4,
-                    },
-                    0
-                )
                 .add(pulses, 0);
         });
 
