@@ -3,7 +3,6 @@ body {
     /* background: black; */
     /* color: white; */
     box-sizing: border-box;
-    background-color: #575555e2;
 }
 
 .container {
@@ -77,14 +76,14 @@ h2 {
 .popup01 {
     top: 80dvh;
     /* top: calc(50vh * 2); */
-    left: 5vw;
+    right: 35vw;
 }
 .popup02 {
     top: 190dvh;
-    left: 30vw;
+    left: 25vw;
 }
 .popup03 {
     top: 300dvh;
     left: auto;
-    right: 30vw;
+    right: 25vw;
 }
