@@ -27,17 +27,13 @@ svg {
     background-color: #000;
     aspect-ratio: 1/1;
 }
-@media (max-width: 768px) {
-    svg {
-        aspect-ratio: 0.5/1;
-    }
-}
-
 .item {
     cursor: pointer;
     transition: all 0.3s ease-in-out;
 }
-
+.theLine {
+    filter: url(#glow);
+}
 .line {
     fill: none;
     stroke: white;
@@ -134,5 +130,14 @@ h2 {
     }
     100% {
         box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+    }
+}
+
+@media (max-width: 768px) {
+    svg {
+        aspect-ratio: 0.5/1;
+    }
+    .theLine {
+        filter: none;
     }
 }

@@ -10,15 +10,15 @@ import { ScrollSmoother } from "@/gsap/ScrollSmoother";
 gsap.registerPlugin(ScrollTrigger, DrawSVGPlugin, MotionPathPlugin, GSDevTools, ScrollSmoother);
 
 function App() {
-    useEffect(() => {
-        const smoother = ScrollSmoother.create({
-            smooth: 1, // how long (in seconds) it takes to "catch up" to the native scroll position
-            effects: true, // looks for data-speed and data-lag attributes on elements
-        });
-        return () => {
-            smoother.kill();
-        };
-    }, []);
+    // useEffect(() => {
+    //     const smoother = ScrollSmoother.create({
+    //         smooth: 1, // how long (in seconds) it takes to "catch up" to the native scroll position
+    //         effects: true, // looks for data-speed and data-lag attributes on elements
+    //     });
+    //     return () => {
+    //         smoother.kill();
+    //     };
+    // }, []);
 
     useEffect(() => {
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -290,8 +290,7 @@ function App() {
                                 d={svgPath}
                                 stroke="url(#Gradient1)"
                                 strokeWidth="2"
-                                fill="none"
-                                filter="url(#glow)"></path>
+                                fill="none"></path>
 
                             <circle className="ball ball01" r="10" cx="50" cy="100"></circle>
                             <circle
