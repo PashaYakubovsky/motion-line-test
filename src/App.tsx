@@ -304,7 +304,7 @@ function App() {
                                 className="item item01"
                                 strokeWidth="1"
                                 r="20"
-                                cx="450"
+                                cx="442"
                                 cy="250"></circle>
                             <circle
                                 stroke="url(#Gradient1)"
