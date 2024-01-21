@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import "./App.css";
 import { gsap } from "@/gsap/all";
 import { ScrollTrigger } from "@/gsap/ScrollTrigger";
@@ -9,11 +9,17 @@ import { ScrollSmoother } from "@/gsap/ScrollSmoother";
 
 gsap.registerPlugin(ScrollTrigger, DrawSVGPlugin, MotionPathPlugin, GSDevTools, ScrollSmoother);
 
-ScrollSmoother.create({
-    smooth: 1.35,
-});
-
 function App() {
+    useEffect(() => {
+        const smoother = ScrollSmoother.create({
+            smooth: 1, // how long (in seconds) it takes to "catch up" to the native scroll position
+            effects: true, // looks for data-speed and data-lag attributes on elements
+        });
+        return () => {
+            smoother.kill();
+        };
+    }, []);
+
     useEffect(() => {
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
@@ -220,127 +226,131 @@ function App() {
 
     return (
         <>
-            <div className="offset">
-                <div className="fancy-text">Scroll Down</div>
-            </div>
+            <div id="smooth-wrapper">
+                <div id="smooth-content">
+                    <div className="offset">
+                        <div className="fancy-text">Scroll Down</div>
+                    </div>
 
-            <div className="container">
-                <svg id="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 1300">
-                    <defs>
-                        <pattern
-                            id="image-1"
-                            x="0%"
-                            y="0%"
-                            height="100%"
-                            width="100%"
-                            viewBox="0 0 512 512">
-                            <image
-                                x="0%"
-                                y="0%"
-                                width="512"
-                                height="512"
-                                xlinkHref="/ct.png"></image>
-                        </pattern>
+                    <div className="container">
+                        <svg id="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 1300">
+                            <defs>
+                                <pattern
+                                    id="image-1"
+                                    x="0%"
+                                    y="0%"
+                                    height="100%"
+                                    width="100%"
+                                    viewBox="0 0 512 512">
+                                    <image
+                                        x="0%"
+                                        y="0%"
+                                        width="512"
+                                        height="512"
+                                        xlinkHref="/ct.png"></image>
+                                </pattern>
 
-                        {/* pattern with gradient color */}
-                        <linearGradient id="Gradient1" x1="0" x2="1" y1="0" y2="1">
-                            <stop offset="0%" stop-color="#FC8B8B" />
-                            <stop offset="100%" stop-color="#fff" />
-                        </linearGradient>
+                                {/* pattern with gradient color */}
+                                <linearGradient id="Gradient1" x1="0" x2="1" y1="0" y2="1">
+                                    <stop offset="0%" stop-color="#FC8B8B" />
+                                    <stop offset="100%" stop-color="#fff" />
+                                </linearGradient>
 
-                        {/* glowing effect only for end of svg path */}
-                        <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
-                            <feGaussianBlur stdDeviation="5" result="glow" />
-                            <feMerge>
-                                <feMergeNode in="glow" />
-                                <feMergeNode in="SourceGraphic" />
-                            </feMerge>
-                        </filter>
+                                {/* glowing effect only for end of svg path */}
+                                <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+                                    <feGaussianBlur stdDeviation="5" result="glow" />
+                                    <feMerge>
+                                        <feMergeNode in="glow" />
+                                        <feMergeNode in="SourceGraphic" />
+                                    </feMerge>
+                                </filter>
 
-                        <filter id="glow2" x="-250%" y="-250%" width="500%" height="500%">
-                            <feGaussianBlur id="glower" stdDeviation="5" result="glow" />
-                            <feMerge>
-                                <feMergeNode in="glow" />
-                                <feMergeNode in="SourceGraphic" />
-                            </feMerge>
-                        </filter>
-                    </defs>
+                                <filter id="glow2" x="-250%" y="-250%" width="500%" height="500%">
+                                    <feGaussianBlur id="glower" stdDeviation="5" result="glow" />
+                                    <feMerge>
+                                        <feMergeNode in="glow" />
+                                        <feMergeNode in="SourceGraphic" />
+                                    </feMerge>
+                                </filter>
+                            </defs>
 
-                    {/* animation for glowing effect */}
-                    <animate
-                        xlinkHref="#glower"
-                        attributeName="stdDeviation"
-                        from="0"
-                        to="100"
-                        dur="1s"
-                        begin="0s"
-                        repeatCount="indefinite"
-                    />
+                            {/* animation for glowing effect */}
+                            <animate
+                                xlinkHref="#glower"
+                                attributeName="stdDeviation"
+                                from="0"
+                                to="100"
+                                dur="1s"
+                                begin="0s"
+                                repeatCount="indefinite"
+                            />
 
-                    <path
-                        className="theLine"
-                        d={svgPath}
-                        stroke="url(#Gradient1)"
-                        strokeWidth="2"
-                        fill="none"
-                        filter="url(#glow)"></path>
+                            <path
+                                className="theLine"
+                                d={svgPath}
+                                stroke="url(#Gradient1)"
+                                strokeWidth="2"
+                                fill="none"
+                                filter="url(#glow)"></path>
 
-                    <circle className="ball ball01" r="10" cx="50" cy="100"></circle>
-                    <circle
-                        stroke="url(#Gradient1)"
-                        id="01"
-                        className="item item01"
-                        strokeWidth="1"
-                        r="20"
-                        cx="450"
-                        cy="250"></circle>
-                    <circle
-                        stroke="url(#Gradient1)"
-                        id="02"
-                        className="item item02"
-                        strokeWidth="1"
-                        r="20"
-                        cx="65"
-                        cy="641"></circle>
-                    <circle
-                        stroke="url(#Gradient1)"
-                        strokeWidth="1"
-                        id="03"
-                        className="item item03"
-                        r="20"
-                        cx="550"
-                        cy="981"></circle>
+                            <circle className="ball ball01" r="10" cx="50" cy="100"></circle>
+                            <circle
+                                stroke="url(#Gradient1)"
+                                id="01"
+                                className="item item01"
+                                strokeWidth="1"
+                                r="20"
+                                cx="450"
+                                cy="250"></circle>
+                            <circle
+                                stroke="url(#Gradient1)"
+                                id="02"
+                                className="item item02"
+                                strokeWidth="1"
+                                r="20"
+                                cx="65"
+                                cy="641"></circle>
+                            <circle
+                                stroke="url(#Gradient1)"
+                                strokeWidth="1"
+                                id="03"
+                                className="item item03"
+                                r="20"
+                                cx="550"
+                                cy="981"></circle>
 
-                    {/* add text and connect with items */}
-                    <text
-                        className="text text01"
-                        x="100"
-                        y="250"
-                        font-family="Calibri"
-                        font-size="20"
-                        fill="white">
-                        Lorem ipsum dolor
-                    </text>
+                            {/* add text and connect with items */}
+                            <text
+                                className="text text01"
+                                x="100"
+                                y="250"
+                                font-family="Calibri"
+                                font-size="20"
+                                fill="white">
+                                Lorem ipsum dolor
+                            </text>
 
-                    <text
-                        className="text text02"
-                        x="165"
-                        y="641"
-                        textAnchor="right"
-                        width="200"
-                        dominantBaseline="middle">
-                        Lorem ipsum dolor
-                    </text>
+                            <text
+                                className="text text02"
+                                x="165"
+                                y="641"
+                                textAnchor="right"
+                                width="200"
+                                dominantBaseline="middle">
+                                Lorem ipsum dolor
+                            </text>
 
-                    <text
-                        className="text text03"
-                        x="350"
-                        y="981"
-                        textAnchor="middle"
-                        dominantBaseline="middle">
-                        Lorem ipsum dolor
-                    </text>
-                </svg>
+                            <text
+                                className="text text03"
+                                x="350"
+                                y="981"
+                                textAnchor="middle"
+                                dominantBaseline="middle">
+                                Lorem ipsum dolor
+                            </text>
+                        </svg>
+                    </div>
+                </div>
             </div>
         </>
     );
