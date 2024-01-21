@@ -10,15 +10,15 @@ import { ScrollSmoother } from "@/gsap/ScrollSmoother";
 gsap.registerPlugin(ScrollTrigger, DrawSVGPlugin, MotionPathPlugin, GSDevTools, ScrollSmoother);
 
 function App() {
-    // useEffect(() => {
-    //     const smoother = ScrollSmoother.create({
-    //         smooth: 1, // how long (in seconds) it takes to "catch up" to the native scroll position
-    //         effects: true, // looks for data-speed and data-lag attributes on elements
-    //     });
-    //     return () => {
-    //         smoother.kill();
-    //     };
-    // }, []);
+    useEffect(() => {
+        const smoother = ScrollSmoother.create({
+            smooth: 1, // how long (in seconds) it takes to "catch up" to the native scroll position
+            effects: true, // looks for data-speed and data-lag attributes on elements
+        });
+        return () => {
+            smoother.kill();
+        };
+    }, []);
 
     useEffect(() => {
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -38,6 +38,11 @@ function App() {
                 showTimeText3: 2.52,
             };
             const isMobile = window.innerWidth < 768;
+            const isTablet = window.innerWidth < 1024;
+            if (isTablet) {
+                config.showTime3 = 1.92;
+                config.showTimeText3 = 1.92;
+            }
             if (isMobile) {
                 config.showTime3 = 1.72;
                 config.showTimeText3 = 1.72;
