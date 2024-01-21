@@ -1,4 +1,4 @@
-import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import "./App.css";
 import { gsap } from "@/gsap/all";
 import { ScrollTrigger } from "@/gsap/ScrollTrigger";
