@@ -33,3 +33,8 @@ declare module "@/gsap/GSDevTools" {
     import { GSDevTools } from "gsap/GSDevTools";
     export { GSDevTools };
 }
+
+declare module "@/gsap/ScrollSmoother" {
+    import { ScrollSmoother } from "gsap/ScrollSmoother";
+    export { ScrollSmoother };
+}
