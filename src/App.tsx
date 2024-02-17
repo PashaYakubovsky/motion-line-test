@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect } from "react";
 import "./App.css";
 import { gsap } from "@/gsap/all";
 import { ScrollTrigger } from "@/gsap/ScrollTrigger";
@@ -31,22 +31,14 @@ function App() {
             const config = {
                 scale: 2.0,
                 showTime1: 0.05,
-                showTimeText1: 0.25,
-                showTime2: 0.96,
-                showTimeText2: 1.06,
-                showTime3: 2.52,
-                showTimeText3: 2.52,
+                showTime2: 0.6,
+                showTime3: 1.2,
+                showTime4: 2.1,
+                showTime5: 2.6,
+                showTime6: 3.2,
             };
-            const isMobile = window.innerWidth < 768;
-            const isTablet = window.innerWidth < 1024;
-            if (isTablet) {
-                config.showTime3 = 1.92;
-                config.showTimeText3 = 1.92;
-            }
-            if (isMobile) {
-                config.showTime3 = 1.72;
-                config.showTimeText3 = 1.72;
-            }
+            // const isMobile = window.innerWidth < 768;
+            // const isTablet = window.innerWidth < 1024;
 
             const pulses = gsap
                 .timeline({
@@ -65,18 +57,6 @@ function App() {
                     },
                     config.showTime1
                 )
-                .fromTo(
-                    ".text01",
-                    {
-                        opacity: 0,
-                        y: 50,
-                    },
-                    {
-                        opacity: 1,
-                        y: 0,
-                    },
-                    config.showTimeText1
-                )
                 .to(
                     ".item02",
                     {
@@ -85,18 +65,7 @@ function App() {
                     },
                     config.showTime2
                 )
-                .fromTo(
-                    ".text02",
-                    {
-                        opacity: 0,
-                        y: 50,
-                    },
-                    {
-                        opacity: 1,
-                        y: 0,
-                    },
-                    config.showTimeText2
-                )
+
                 .to(
                     ".item03",
                     {
@@ -105,25 +74,38 @@ function App() {
                     },
                     config.showTime3
                 )
-                .fromTo(
-                    ".text03",
+                .to(
+                    ".item04",
                     {
-                        opacity: 0,
-                        y: 50,
+                        fill: "url(#image-1)",
+                        scale: config.scale,
                     },
+                    config.showTime4
+                )
+                .to(
+                    ".item05",
                     {
-                        opacity: 1,
-                        y: 0,
+                        fill: "url(#image-1)",
+                        scale: config.scale,
                     },
-                    config.showTimeText3
+                    config.showTime5
+                )
+                .to(
+                    ".item06",
+                    {
+                        fill: "url(#image-1)",
+                        scale: config.scale,
+                    },
+                    config.showTime6
                 );
 
             gsap.timeline({
                 scrollTrigger: {
                     trigger: "#svg",
                     scrub: true,
-                    start: "top 20%",
-                    end: "bottom center",
+                    start: "top top",
+                    end: "bottom bottom",
+                    // markers: true,
                     toggleActions: "play none none none",
                 },
             })
@@ -149,24 +131,8 @@ function App() {
         };
     }, []);
 
-    const viewportRectRef = useRef<{
-        width: number;
-        height: number;
-    } | null>(null);
-
     useEffect(() => {
-        const handleResize = () => {
-            // get rect of viewport object
-            const rect = {
-                width: window.innerWidth,
-                height: window.innerHeight,
-            };
-            viewportRectRef.current = rect || null;
-            // setP(`M -500,0
-            // Q ${rect.height * 0.1} 230 300 450
-            // T 130 1050
-            // T 150 2200`);
-        };
+        const handleResize = () => {};
 
         handleResize();
 
@@ -174,59 +140,6 @@ function App() {
         return () => {
             window.removeEventListener("resize", handleResize);
         };
-    }, []);
-
-    const [svgPath] = useState<string>(`
-        M 200,0
-        Q 650 230 250 450 
-        T 300 800
-        T 400 1200
-        T 0 1300
-    `);
-
-    useEffect(() => {
-        const circleElements = document.querySelectorAll(".item");
-
-        // check position of element and set popup position
-        const checkPosition = (elem: SVGCircleElement | null, popupElem: HTMLElement | null) => {
-            if (elem && popupElem) {
-                // get rect of svr circle element and set popup position with the scale of svg
-                const rect = elem.getBoundingClientRect();
-                const popupRect = popupElem.getBoundingClientRect();
-                const svg = document.querySelector("#svg");
-                if (!svg) return;
-                const svgRect = svg.getBoundingClientRect();
-                const scale = svgRect.width / 600;
-                const popupWidth = popupRect.width;
-                const popupHeight = popupRect.height;
-
-                // set popup position
-                const popupX = rect.x + rect.width / 2 - popupWidth / scale;
-                console.log(rect.y);
-                const popupY = rect.y - popupHeight - popupHeight * 0.5 * scale;
-                console.log(popupX, popupY);
-
-                // set popup position
-                popupElem.style.top = `${popupY}px`;
-
-                // if popup be out of svg, set popup position to left, or right
-                if (popupX < 0) {
-                    popupElem.style.left = `${0}px`;
-                } else if (popupX + popupWidth > svgRect.width) {
-                    popupElem.style.left = `${svgRect.width - popupWidth}px`;
-                } else {
-                    popupElem.style.left = `${popupX}px`;
-                }
-            }
-        };
-
-        circleElements.forEach(circleElem => {
-            const circle = circleElem as SVGCircleElement;
-            const id = circle.id;
-            const popupElem = document.querySelector(`.popup${id}`) as HTMLElement;
-            if (!circle || !popupElem) return;
-            checkPosition(circle, popupElem);
-        });
     }, []);
 
     return (
@@ -238,7 +151,7 @@ function App() {
                     </div>
 
                     <div className="container">
-                        <svg id="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 1300">
+                        <svg id="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 461 2055">
                             <defs>
                                 <pattern
                                     id="image-1"
@@ -257,8 +170,8 @@ function App() {
 
                                 {/* pattern with gradient color */}
                                 <linearGradient id="Gradient1" x1="0" x2="1" y1="0" y2="1">
-                                    <stop offset="0%" stop-color="#FC8B8B" />
-                                    <stop offset="100%" stop-color="#fff" />
+                                    <stop offset="0%" stopColor="#FC8B8B" />
+                                    <stop offset="100%" stopColor="#fff" />
                                 </linearGradient>
 
                                 {/* glowing effect only for end of svg path */}
@@ -292,66 +205,42 @@ function App() {
 
                             <path
                                 className="theLine"
-                                d={svgPath}
+                                d="M406.037 1L403.898 6.03509L401.371 11.0702L398.462 16.1053L395.177 21.1403L391.523 26.1754L387.51 31.2105L383.144 36.2456L378.438 41.2807L373.4 46.3158L368.042 51.3509L362.375 56.386L356.413 61.421L350.169 66.4561L343.656 71.4912L336.89 76.5263L329.884 81.5614L322.655 86.5965L315.218 91.6316L307.59 96.6667L299.789 101.702L291.831 106.737L283.734 111.772L275.516 116.807L267.195 121.842L258.79 126.877L250.319 131.912L241.802 136.947L233.256 141.982L224.702 147.018L216.158 152.053L207.642 157.088L199.175 162.123L190.775 167.158L182.46 172.193L174.248 177.228L166.159 182.263L158.21 187.298L150.419 192.333L142.803 197.368L135.378 202.403L128.162 207.439L121.17 212.474L114.419 217.509L107.922 222.544L101.695 227.579L95.7504 232.614L90.1025 237.649L84.7636 242.684L79.7454 247.719L75.0592 252.754L70.7153 257.789L66.7234 262.825L63.0923 267.86L59.8301 272.895L56.9439 277.93L54.4404 282.965L52.325 288L50.6023 293.035L49.2763 298.07L48.3498 303.105L47.8249 308.14L47.7029 313.175L47.9838 318.21L48.6673 323.246L49.7516 328.281L51.2345 333.316L53.1126 338.351L55.3817 343.386L58.0368 348.421L61.072 353.456L64.4806 358.491L68.2551 363.526L72.3869 368.561L76.867 373.596L81.6854 378.632L86.8314 383.667L92.2937 388.702L98.0599 393.737L104.117 398.772L110.453 403.807L117.052 408.842L123.9 413.877L130.982 418.912L138.282 423.947L145.784 428.982L153.472 434.018L161.327 439.053L169.334 444.088L177.473 449.123L185.727 454.158L194.078 459.193L202.507 464.228L210.996 469.263L219.525 474.298L228.075 479.333L236.628 484.368L245.165 489.403L253.666 494.439L262.113 499.474L270.487 504.509L278.77 509.544L286.942 514.579L294.987 519.614L302.885 524.649L310.62 529.684L318.174 534.719L325.531 539.754L332.674 544.789L339.588 549.825L346.256 554.86L352.664 559.895L358.799 564.93L364.646 569.965L370.192 575L375.425 580.035L380.334 585.07L384.907 590.105L389.135 595.14L393.007 600.175L396.517 605.211L399.654 610.246L402.413 615.281L404.788 620.316L406.773 625.351L408.364 630.386L409.557 635.421L410.35 640.456L410.741 645.491L410.728 650.526L410.313 655.561L409.496 660.596L408.278 665.632L406.663 670.667L404.654 675.702L402.256 680.737L399.473 685.772L396.313 690.807L392.781 695.842L388.887 700.877L384.638 705.912L380.044 710.947L375.115 715.982L369.862 721.018L364.297 726.053L358.433 731.088L352.281 736.123L345.856 741.158L339.172 746.193L332.245 751.228L325.088 756.263L317.719 761.298L310.153 766.333L302.408 771.368L294.5 776.403L286.447 781.439L278.267 786.474L269.979 791.509L261.6 796.544L253.149 801.579L244.645 806.614L236.107 811.649L227.553 816.684L219.003 821.719L210.476 826.754L201.991 831.789L193.566 836.825L185.221 841.86L176.973 846.895L168.841 851.93L160.843 856.965L152.997 862L145.321 867.035L137.83 872.07L130.543 877.105L123.475 882.14L116.642 887.175L110.058 892.21L103.74 897.246L97.6995 902.281L91.9514 907.316L86.5081 912.351L81.3818 917.386L76.5837 922.421L72.1246 927.456L68.0143 932.491L64.262 937.526L60.876 942.561L57.8637 947.596L55.232 952.632L52.9867 957.667L51.1326 962.702L49.674 967.737L48.614 972.772L47.9551 977.807L47.6987 982.842L47.8454 987.877L48.3948 992.912L49.3457 997.947L50.6961 1002.98L52.4428 1008.02L54.5821 1013.05L57.1091 1018.09L60.0184 1023.12L63.3034 1028.16L66.9567 1033.19L70.9704 1038.23L75.3355 1043.26L80.0423 1048.3L85.0804 1053.33L90.4385 1058.37L96.1048 1063.4L102.067 1068.44L108.311 1073.47L114.824 1078.51L121.59 1083.54L128.596 1088.58L135.825 1093.61L143.262 1098.65L150.89 1103.68L158.691 1108.72L166.649 1113.75L174.746 1118.79L182.964 1123.82L191.285 1128.86L199.69 1133.89L208.161 1138.93L216.678 1143.96L225.224 1149L233.778 1154.04L242.322 1159.07L250.838 1164.11L259.305 1169.14L267.705 1174.18L276.02 1179.21L284.232 1184.25L292.321 1189.28L300.27 1194.32L308.061 1199.35L315.677 1204.39L323.102 1209.42L330.318 1214.46L337.31 1219.49L344.061 1224.53L350.558 1229.56L356.785 1234.6L362.73 1239.63L368.377 1244.67L373.716 1249.7L378.735 1254.74L383.421 1259.77L387.765 1264.81L391.757 1269.84L395.388 1274.88L398.65 1279.91L401.536 1284.95L404.04 1289.98L406.155 1295.02L407.878 1300.05L409.204 1305.09L410.13 1310.12L410.655 1315.16L410.777 1320.19L410.496 1325.23L409.813 1330.26L408.728 1335.3L407.245 1340.33L405.367 1345.37L403.098 1350.4L400.443 1355.44L397.408 1360.47L393.999 1365.51L390.225 1370.54L386.093 1375.58L381.613 1380.61L376.795 1385.65L371.648 1390.68L366.186 1395.72L360.42 1400.75L354.363 1405.79L348.027 1410.82L341.428 1415.86L334.58 1420.89L327.498 1425.93L320.198 1430.96L312.696 1436L305.008 1441.04L297.153 1446.07L289.146 1451.11L281.007 1456.14L272.752 1461.18L264.402 1466.21L255.972 1471.25L247.484 1476.28L238.955 1481.32L230.405 1486.35L221.852 1491.39L213.315 1496.42L204.814 1501.46L196.367 1506.49L187.993 1511.53L179.71 1516.56L171.538 1521.6L163.493 1526.63L155.595 1531.67L147.86 1536.7L140.306 1541.74L132.949 1546.77L125.806 1551.81L118.892 1556.84L112.224 1561.88L105.815 1566.91L99.681 1571.95L93.8341 1576.98L88.2879 1582.02L83.0546 1587.05L78.1459 1592.09L73.5727 1597.12L69.3451 1602.16L65.4724 1607.19L61.9635 1612.23L58.8258 1617.26L56.0666 1622.3L53.6918 1627.33L51.7068 1632.37L50.116 1637.4L48.9229 1642.44L48.1301 1647.47L47.7393 1652.51L47.7517 1657.54L48.1669 1662.58L48.9842 1667.61L50.2017 1672.65L51.8167 1677.68L53.8256 1682.72L56.224 1687.75L59.0065 1692.79L62.167 1697.82L65.6985 1702.86L69.593 1707.89L73.842 1712.93L78.436 1717.96L83.3649 1723L88.6176 1728.04L94.1825 1733.07L100.047 1738.11L106.199 1743.14L112.624 1748.18L119.307 1753.21L126.235 1758.25L133.392 1763.28L140.761 1768.32L148.327 1773.35L156.072 1778.39L163.98 1783.42L172.033 1788.46L180.213 1793.49L188.501 1798.53L196.88 1803.56L205.331 1808.6L213.835 1813.63L222.373 1818.67L230.927 1823.7L239.477 1828.74L248.004 1833.77L256.489 1838.81L264.914 1843.84L273.259 1848.88L281.507 1853.91L289.639 1858.95L297.637 1863.98L305.483 1869.02L313.159 1874.05L320.649 1879.09L327.937 1884.12L335.005 1889.16L341.838 1894.19L348.422 1899.23L354.74 1904.26L360.78 1909.3L366.529 1914.33L371.972 1919.37L377.098 1924.4L381.896 1929.44L386.355 1934.47L390.466 1939.51L394.218 1944.54L397.604 1949.58L400.616 1954.61L403.248 1959.65L405.493 1964.68L407.347 1969.72L408.806 1974.75L409.866 1979.79L410.525 1984.82L410.781 1989.86L410.634 1994.89L410.085 1999.93L409.134 2004.96L407.784 2010"
                                 stroke="url(#Gradient1)"
                                 strokeWidth="2"
                                 fill="none"></path>
 
                             <circle className="ball ball01" r="10" cx="50" cy="100"></circle>
-                            <circle
-                                stroke="url(#Gradient1)"
-                                id="01"
+                            <path
                                 className="item item01"
-                                strokeWidth="1"
-                                r="20"
-                                cx="442"
-                                cy="250"></circle>
-                            <circle
+                                d="M0.500012 307C0.500014 279.662 22.6619 257.5 50 257.5C77.3381 257.5 99.5 279.662 99.5 307C99.5 334.338 77.3381 356.5 50 356.5C22.6619 356.5 0.50001 334.338 0.500012 307Z"
                                 stroke="url(#Gradient1)"
-                                id="02"
+                            />
+                            <path
                                 className="item item02"
-                                strokeWidth="1"
-                                r="20"
-                                cx="65"
-                                cy="641"></circle>
-                            <circle
+                                d="M361.5 645C361.5 617.662 383.662 595.5 411 595.5C438.338 595.5 460.5 617.662 460.5 645C460.5 672.338 438.338 694.5 411 694.5C383.662 694.5 361.5 672.338 361.5 645Z"
                                 stroke="url(#Gradient1)"
-                                strokeWidth="1"
-                                id="03"
+                            />
+                            <path
                                 className="item item03"
-                                r="20"
-                                cx="550"
-                                cy="981"></circle>
-
-                            {/* add text and connect with items */}
-                            <text
-                                className="text text01"
-                                x="100"
-                                y="250"
-                                font-family="Calibri"
-                                font-size="20"
-                                fill="white">
-                                Lorem ipsum dolor
-                            </text>
-
-                            <text
-                                className="text text02"
-                                x="165"
-                                y="641"
-                                textAnchor="right"
-                                width="200"
-                                dominantBaseline="middle">
-                                Lorem ipsum dolor
-                            </text>
-
-                            <text
-                                className="text text03"
-                                x="350"
-                                y="981"
-                                textAnchor="middle"
-                                dominantBaseline="middle">
-                                Lorem ipsum dolor
-                            </text>
+                                d="M0.499989 983C0.499992 955.662 22.6619 933.5 50 933.5C77.3381 933.5 99.5 955.662 99.5 983C99.5 1010.34 77.3381 1032.5 50 1032.5C22.6619 1032.5 0.499987 1010.34 0.499989 983Z"
+                                stroke="url(#Gradient1)"
+                            />
+                            <path
+                                className="item item04"
+                                d="M361.5 1325C361.5 1297.66 383.662 1275.5 411 1275.5C438.338 1275.5 460.5 1297.66 460.5 1325C460.5 1352.34 438.338 1374.5 411 1374.5C383.662 1374.5 361.5 1352.34 361.5 1325Z"
+                                stroke="url(#Gradient1)"
+                            />
+                            <path
+                                className="item item05"
+                                d="M0.499981 1659C0.499984 1631.66 22.6619 1609.5 50 1609.5C77.3381 1609.5 99.5 1631.66 99.5 1659C99.5 1686.34 77.3381 1708.5 50 1708.5C22.6619 1708.5 0.499979 1686.34 0.499981 1659Z"
+                                stroke="url(#Gradient1)"
+                            />
+                            <path
+                                className="item item06"
+                                d="M361.5 2005C361.5 1977.66 383.662 1955.5 411 1955.5C438.338 1955.5 460.5 1977.66 460.5 2005C460.5 2032.34 438.338 2054.5 411 2054.5C383.662 2054.5 361.5 2032.34 361.5 2005Z"
+                                stroke="url(#Gradient1)"
+                            />
                         </svg>
                     </div>
                 </div>

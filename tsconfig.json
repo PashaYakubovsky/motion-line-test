@@ -24,7 +24,8 @@
         "paths": {
             "@/public/*": ["public/*"],
             "@/gsap/*": ["libs/gsap-business/esm/*"]
-        }
+        },
+        "types": ["vite-plugin-glsl/ext"]
     },
     "include": ["src"],
     "references": [{ "path": "./tsconfig.node.json" }],
